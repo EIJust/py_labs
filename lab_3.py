@@ -3,6 +3,22 @@ from bs4 import BeautifulSoup
 from bs4 import Tag
 
 
+class News:
+    def __init__(self, headline=None, annotation=None, authors=None):
+        self.headline = headline
+        self.annotation = annotation
+        self.authors = authors
+
+    def __str__(self):
+        return 'headline: {}\nannotation: {}\nauthors: {}\n'.format(self.headline, self.annotation, self.authors)
+
+    def __hash__(self):
+        return self.headline.__hash__()
+
+    def __eq__(self, other):
+        return self.headline == other.headline
+
+
 def is_news_block(tag):
     return tag.has_attr('data-feature-id') and tag['data-feature-id'] == 'homepage/story'
 
@@ -31,7 +47,7 @@ def get_washingtonpost_news():
         if annotation is None:
             continue
 
-        news.append({"headline": headline.get_text(), "annotation": annotation.get_text(), "authors": authors})
+        news.append(News(headline.get_text(), annotation.get_text(), authors))
     return news
 
 
